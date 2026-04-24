@@ -141,7 +141,7 @@ void setup() {
 
   while (!theSD.begin()) { putStringOnLcd("Insert SD card", ILI9341_RED); }
   
-  File nnbfile = theSD.open("model.nnb");
+  File nnbfile = theSD.open("abc.nnb");
   int ret = dnnrt.begin(nnbfile);
   if (ret < 0) {
     putStringOnLcd("dnnrt.begin failed" + String(ret), ILI9341_RED);
