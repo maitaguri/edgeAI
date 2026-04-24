@@ -31,8 +31,8 @@ SDClass theSD;
 #define TFT_DC  9
 #define TFT_CS  10
 
-#define DNN_IMG_W 28
-#define DNN_IMG_H 28
+#define DNN_IMG_W 128
+#define DNN_IMG_H 128
 #define CAM_IMG_W 320
 #define CAM_IMG_H 240
 #define CAM_CLIP_X 104
@@ -141,7 +141,7 @@ void setup() {
 
   while (!theSD.begin()) { putStringOnLcd("Insert SD card", ILI9341_RED); }
   
-  File nnbfile = theSD.open("abc.nnb");
+  File nnbfile = theSD.open("moel.nnb");
   int ret = dnnrt.begin(nnbfile);
   if (ret < 0) {
     putStringOnLcd("dnnrt.begin failed" + String(ret), ILI9341_RED);
