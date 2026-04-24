@@ -68,27 +68,36 @@ def create_dataset_csv(dataset_base_path, output_csv_path):
         image_paths, labels, test_size=0.2, stratify=labels, random_state=42
     )
 
-    # Create data rows with train/validation type
-    data_rows = []
+    # Create separate train and validation data rows
+    train_rows = []
+    val_rows = []
     for path, label in zip(train_paths, train_labels):
-        data_rows.append([path, label, "train"])
+        train_rows.append([path, label])
     for path, label in zip(val_paths, val_labels):
-        data_rows.append([path, label, "validation"])
+        val_rows.append([path, label])
 
-    # CSVファイルに出力
+    # NNC standard headers
+    headers = ["x:image", "y:label"]
+
+    # Output paths
     os.makedirs(os.path.dirname(output_csv_path), exist_ok=True)
+    train_csv_path = os.path.join(os.path.dirname(output_csv_path), "train.csv")
+    val_csv_path = os.path.join(os.path.dirname(output_csv_path), "val.csv")
 
-    with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
+    with open(train_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        # ヘッダー行
-        writer.writerow(["image_path", "label", "type"])
-        # データ行
-        writer.writerows(data_rows)
+        writer.writerow(headers)
+        writer.writerows(train_rows)
+
+    with open(val_csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        writer.writerows(val_rows)
 
     print("\n" + "=" * 73)
     print(f"✅ CSV生成完了！")
-    print(f"   出力ファイル: {output_csv_path}")
-    print(f"   合計行数: {len(data_rows) + 1}行（ヘッダー含む）")
+    print(f"   Trainファイル: {train_csv_path} ({len(train_rows)}行)")
+    print(f"   Validationファイル: {val_csv_path} ({len(val_rows)}行)")
     print("=" * 73)
 
     # 全体の統計情報
